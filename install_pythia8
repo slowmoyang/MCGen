@@ -1,0 +1,41 @@
+#!/bin/sh
+ROOT_DIR=${1}
+HEPMC_VERSION=${2:-"2.06.09"}
+PYTHIA_VERSION=${3:-"8235"}
+
+CURDIR=$(pwd)
+
+# Install HepMC2
+HEPMC_DIR=${CURDIR}/HepMC2
+if [ ! -f ${CURDIR}/hepmc${HEPMC_VERSION}.tgz ] 
+then
+    wget http://hepmc.web.cern.ch/hepmc/releases/hepmc${HEPMC_VERSION}.tgz
+fi
+
+if [ ! -d ${CURDIR}/HepMC2 ]
+then
+  tar -xzf hepmc${HEPMC_VERSION}.tgz
+  cd ./hepmc${HEPMC_VERSION}
+  ./configure --prefix=${HEPMC_DIR} \
+              --with-momentum=GEV \
+              --with-length=MM
+  make
+  make check
+  make install
+  cd ${CURDIR}
+fi
+
+
+# Install Pythia8 with HepMC2
+if [ ! -f ${CURDIR}/pythia${PYTHIA_VERSION}.tgz ]
+then
+    wget http://home.thep.lu.se/~torbjorn/pythia8/pythia${PYTHIA_VERSION}.tgz
+fi
+
+tar -xzf pythia${PYTHIA_VERSION}.tgz 
+cd ${CURDIR}/pythia${PYTHIA_VERSION}
+./configure --with-root=${ROOT_DIR} \
+            --with-hepmc2=${HEPMC_DIR}
+make
+
+cd ${CURDIR}
