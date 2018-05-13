@@ -1,0 +1,9 @@
+/Downloads
+/pythia*
+/HepMC2
+/LHAPDF6
+*.dat
+*.out
+*.png
+*.pdf
+*.inc
