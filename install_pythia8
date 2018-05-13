@@ -1,41 +1,57 @@
 #!/bin/sh
-ROOT_DIR=${1}
-HEPMC_VERSION=${2:-"2.06.09"}
-PYTHIA_VERSION=${3:-"8235"}
+ROOT_DIR=${1:-${ROOTSYS}}
+JOBS=${2:-4}
+
+PYTHIA_VER="8235"
+HEPMC2_VER="2.06.09"
+LHAPDF6_VER="6.2.1"
 
 CURDIR=$(pwd)
 
 # Install HepMC2
-HEPMC_DIR=${CURDIR}/HepMC2
-if [ ! -f ${CURDIR}/hepmc${HEPMC_VERSION}.tgz ] 
+HEPMC2_DIR=${CURDIR}/HepMC2
+if [ ! -f ${CURDIR}/hepmc${HEPMC2_VER}.tgz ] 
 then
-    wget http://hepmc.web.cern.ch/hepmc/releases/hepmc${HEPMC_VERSION}.tgz
+    wget http://hepmc.web.cern.ch/hepmc/releases/hepmc${HEPMC2_VER}.tgz
 fi
 
 if [ ! -d ${CURDIR}/HepMC2 ]
 then
-  tar -xzf hepmc${HEPMC_VERSION}.tgz
-  cd ./hepmc${HEPMC_VERSION}
-  ./configure --prefix=${HEPMC_DIR} \
+  tar -xzf hepmc${HEPMC2_VER}.tgz
+  cd ./hepmc${HEPMC2_VER}
+  ./configure --prefix=${HEPMC2_DIR} \
               --with-momentum=GEV \
               --with-length=MM
-  make
+  make -j${JOBS}
   make check
   make install
   cd ${CURDIR}
 fi
 
 
-# Install Pythia8 with HepMC2
-if [ ! -f ${CURDIR}/pythia${PYTHIA_VERSION}.tgz ]
+# Install LHAPDF6
+LHAPDF6_DIR=${CURDIR}/LHAPDF6
+mkdir -v ${LHAPDF6_DIR}
+wget http://www.hepforge.org/archive/lhapdf/LHAPDF6-${LHAPDF6_VER}.tar.gz
+tar xf LHAPDF6-${LHAPDF6_VER}.tar.gz
+cd LHAPDF6-${LHAPDF6_VER}
+./configure --prefix=${LHAPDF6_DIR}
+make -j${JOBS}
+make install
+cd ${CURDIR}
+
+
+# Install Pythia8
+if [ ! -f ${CURDIR}/pythia${PYTHIA_VER}.tgz ]
 then
-    wget http://home.thep.lu.se/~torbjorn/pythia8/pythia${PYTHIA_VERSION}.tgz
+    wget http://home.thep.lu.se/~torbjorn/pythia8/pythia${PYTHIA_VER}.tgz
 fi
 
-tar -xzf pythia${PYTHIA_VERSION}.tgz 
-cd ${CURDIR}/pythia${PYTHIA_VERSION}
+tar -xzf pythia${PYTHIA_VER}.tgz 
+cd ${CURDIR}/pythia${PYTHIA_VER}
 ./configure --with-root=${ROOT_DIR} \
-            --with-hepmc2=${HEPMC_DIR}
-make
+            --with-hepmc2=${HEPMC2_DIR} \
+            --with-lhapdf6=${LHAPDF6_DIR} \
+make -j${JOBS}
 
 cd ${CURDIR}
