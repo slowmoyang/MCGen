@@ -19,17 +19,12 @@ int main()
   TCanvas *can = new TCanvas("can", "can", 800, 600);
   TH1D *h_cmult = new TH1D(
     "hist_cmult_over_eta",
-    "Charged particle density distribution, ",
+    "Charged particle density distribution",
     51, -5, 5);
 
   Pythia pythia;
 
   pythia.readFile("ex_mb_event.cmnd");
-  // pythia.readString("Beams:eCM = 13000.");
-  // pythia.readString("SoftQCD:minBias = on");
-  // pythia.readString("SoftQCD:nonDiffractive = on");
-  // pythia.readString("SoftQCD:singleDiffractive = on");
-  // pythia.readString("SoftQCD:doubleDiffractive = on");
 
   pythia.init();
  
@@ -57,6 +52,7 @@ int main()
   h_cmult->Draw("hist");
   h_cmult->GetXaxis()->SetTitle("#eta");
   h_cmult->GetYaxis()->SetTitle("#frac{dN_{ch}}{d#eta}");
+  can->SetLeftMargin(0.175);
   can->SaveAs("./cmult.png");
 
   return 0;
