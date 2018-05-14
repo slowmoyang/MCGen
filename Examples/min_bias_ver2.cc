@@ -20,7 +20,7 @@ int main()
   // Interface for conversion from Pythia8::Event to HepMC event.
   HepMC::Pythia8ToHepMC ToHepMC;
   // Specify file where HepMC events will be stored.
-  HepMC::IO_GenEvent ascii_io("min_bias_subrun.dat", std::ios::out);
+  HepMC::IO_GenEvent ascii_io("min_bias_ver2.dat", std::ios::out);
 
   TCanvas *can = new TCanvas("can", "can", 800, 600);
 
@@ -41,7 +41,7 @@ int main()
   const int kNumSubRun = pythia.mode("Main:numberOfSubruns");
   for(int i_subrun = 1; i_subrun <= kNumSubRun; ++i_subrun)
   { 
-    pythia.readFile("min_bias_subrun.cmnd", i_subrun);
+    pythia.readFile("min_bias_ver2.cmnd", i_subrun);
 
     pythia.init();
 
@@ -90,7 +90,7 @@ int main()
   legend->Draw();
 
   can->SetLeftMargin(0.175);
-  can->SaveAs("./charged_particle.png");
+  can->SaveAs("./density_dist_ver2.png");
 
   return 0;
 }

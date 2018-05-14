@@ -14,7 +14,7 @@ int main()
   // Interface for conversion from Pythia8::Event to HepMC event.
   HepMC::Pythia8ToHepMC ToHepMC;
   // Specify file where HepMC events will be stored.
-  HepMC::IO_GenEvent ascii_io("min_bias.dat", std::ios::out);
+  HepMC::IO_GenEvent ascii_io("min_bias_ver1.dat", std::ios::out);
 
   // A Canvas is an area mapped to a window directly under the control of
   // the display manager.
@@ -34,7 +34,7 @@ int main()
   Pythia pythia;
 
   // Read the character of a run from a file.
-  pythia.readFile("min_bias.cmnd");
+  pythia.readFile("min_bias_ver1.cmnd");
 
   pythia.init();
 
@@ -77,7 +77,7 @@ int main()
   can->SetLeftMargin(0.175);
 
   // Save 
-  can->SaveAs("./charged_part_density_dist.png");
+  can->SaveAs("./density_dist_ver1.png");
 
   return 0;
 }
