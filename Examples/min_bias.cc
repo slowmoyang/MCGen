@@ -14,13 +14,13 @@ int main()
   // Interface for conversion from Pythia8::Event to HepMC event.
   HepMC::Pythia8ToHepMC ToHepMC;
   // Specify file where HepMC events will be stored.
-  HepMC::IO_GenEvent ascii_io("min_bias.cmnd", std::ios::out);
+  HepMC::IO_GenEvent ascii_io("min_bias.dat", std::ios::out);
 
   TCanvas *can = new TCanvas("can", "can", 800, 600);
   TH1D *h_cmult = new TH1D(
     "hist_cmult_over_eta",
     "Charged particle density distribution",
-    5001, -5, 5);
+    501, -5, 5);
 
   // 
   Pythia pythia;
@@ -32,7 +32,7 @@ int main()
   pythia.init();
 
   // The event generation loop. 
-  for(Int_t i_evt = 0; i_evt < kNumEvent; ++i_evt)
+  for(int i_evt = 0; i_evt < kNumEvent; ++i_evt)
   {
     if(not pythia.next()) continue;
 
@@ -57,7 +57,7 @@ int main()
   h_cmult->GetXaxis()->SetTitle("#eta");
   h_cmult->GetYaxis()->SetTitle("#frac{dN_{ch}}{d#eta}");
   can->SetLeftMargin(0.175);
-  can->SaveAs("./cmult.png");
+  can->SaveAs("./charged_particle.png");
 
   return 0;
 }
