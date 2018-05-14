@@ -10,37 +10,40 @@ CURDIR=$(pwd)
 DOWNLOAD_DIR=${CURDIR}/Downloads
 mkdir -v ${DOWNLOAD_DIR}
 
+
 # Install HepMC2
 HEPMC2_DIR=${CURDIR}/HepMC2
-if [ ! -f ${CURDIR}/hepmc${HEPMC2_VER}.tgz ] 
-then
-    wget http://hepmc.web.cern.ch/hepmc/releases/hepmc${HEPMC2_VER}.tgz -P ${DOWNLOAD_DIR}
-fi
+mkdir -v ${HEPMC2_DIR}
 
-if [ ! -d ${CURDIR}/HepMC2 ]
-then
-  tar -xzf ${DOWNLOAD_DIR}/hepmc${HEPMC2_VER}.tgz
-  cd hepmc${HEPMC2_VER}
-  ./configure --prefix=${HEPMC2_DIR} \
-              --with-momentum=GEV \
-              --with-length=MM
-  make -j${JOBS}
-  make check
-  make install
-  cd ${CURDIR}
-fi
+wget http://hepmc.web.cern.ch/hepmc/releases/hepmc${HEPMC2_VER}.tgz -P ${DOWNLOAD_DIR}
+tar -xzf ${DOWNLOAD_DIR}/hepmc${HEPMC2_VER}.tgz
+cd hepmc${HEPMC2_VER}
+
+./configure --prefix=${HEPMC2_DIR} \
+            --with-momentum=GEV \
+            --with-length=MM
+
+make -j${JOBS}
+make check
+make install
+
+cd ${CURDIR}
 mv hepmc${HEPMC2_VER} ${DOWNLOAD_DIR}
 
 
 # Install LHAPDF6
 LHAPDF6_DIR=${CURDIR}/LHAPDF6
 mkdir -v ${LHAPDF6_DIR}
+
 wget http://www.hepforge.org/archive/lhapdf/LHAPDF-${LHAPDF6_VER}.tar.gz -P ${DOWNLOAD_DIR}
 tar xf ${DOWNLOAD_DIR}/LHAPDF-${LHAPDF6_VER}.tar.gz
 cd LHAPDF-${LHAPDF6_VER}
+
 ./configure --prefix=${LHAPDF6_DIR}
+
 make -j${JOBS}
 make install
+
 cd ${CURDIR}
 mv LHAPDF-${LHAPDF6_VER} ${DOWNLOAD_DIR}
 
@@ -51,13 +54,10 @@ tar xvfz ${DOWNLOAD_DIR}/NNPDF30_lo_as_0130.tar.gz -C ${LHAPDF6_DIR}/share/LHAPD
 
 
 # Install Pythia8
-if [ ! -f ${CURDIR}/pythia${PYTHIA_VER}.tgz ]
-then
-    wget http://home.thep.lu.se/~torbjorn/pythia8/pythia${PYTHIA_VER}.tgz -P ${DOWNLOAD_DIR}
-fi
-
+wget http://home.thep.lu.se/~torbjorn/pythia8/pythia${PYTHIA_VER}.tgz -P ${DOWNLOAD_DIR}
 tar -xzf ${DOWNLOAD_DIR}/pythia${PYTHIA_VER}.tgz 
 cd ${CURDIR}/pythia${PYTHIA_VER}
+
 ./configure --with-root=${ROOT_DIR} \
             --with-hepmc2=${HEPMC2_DIR} \
             --with-lhapdf6=${LHAPDF6_DIR}
@@ -65,4 +65,5 @@ make -j${JOBS}
 
 cd ${CURDIR}
 
+# Copy Makefile.inc
 cp -v pythia${PYTHIA_VER}/examples/Makefile.inc Examples/
