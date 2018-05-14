@@ -50,11 +50,7 @@ $(PREFIX_LIB)/libpythia8.a :
 	$(error Error: PYTHIA must be built, please run "make"\
                 in the top PYTHIA directory)
 
-# Examples without external dependencies.
-main01 : main01.cc $(PREFIX_LIB)/libpythia8.a
-	$(CXX) $< -o $@ $(CXX_COMMON) $(GZIP_INC) $(GZIP_FLAGS)
-
-ex_mb_event: ex_mb_event.cc $(PREFIX_LIB)/libpythia8.a
+min_bias: min_bias.cc $(PREFIX_LIB)/libpythia8.a
 	$(CXX) $< -o $@ -w -I$(ROOT_INCLUDE) $(CXX_COMMON) \
 	 `$(ROOTBIN)root-config --cflags` \
 	 -Wl,-rpath,$(ROOT_LIB) `$(ROOT_BIN)root-config --glibs` \
