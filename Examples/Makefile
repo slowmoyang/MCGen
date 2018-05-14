@@ -18,7 +18,7 @@
 SHELL=/usr/bin/env bash
 
 # Include the configuration.
--include Makefile.inc
+-include ../pythia8235/Makefile.inc
 
 # Handle GZIP support.
 GZIP_INC=

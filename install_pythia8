@@ -64,6 +64,3 @@ cd ${CURDIR}/pythia${PYTHIA_VER}
 make -j${JOBS}
 
 cd ${CURDIR}
-
-# Copy Makefile.inc
-cp -v pythia${PYTHIA_VER}/examples/Makefile.inc Examples/
