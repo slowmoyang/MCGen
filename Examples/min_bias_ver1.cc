@@ -77,7 +77,7 @@ int main()
   can->SetLeftMargin(0.175);
 
   // Save 
-  can->SaveAs("./charged_particle.png");
+  can->SaveAs("./charged_part_density_dist.png");
 
   return 0;
 }

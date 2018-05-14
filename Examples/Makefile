@@ -50,9 +50,10 @@ $(PREFIX_LIB)/libpythia8.a :
 	$(error Error: PYTHIA must be built, please run "make"\
                 in the top PYTHIA directory)
 
-min_bias: min_bias.cc $(PREFIX_LIB)/libpythia8.a
+min_bias_ver%: min_bias_ver%.cc $(PREFIX_LIB)/libpythia8.a
 	$(CXX) $< -o $@ -w -I$(ROOT_INCLUDE) $(CXX_COMMON) \
 	 `$(ROOTBIN)root-config --cflags` \
 	 -Wl,-rpath,$(ROOT_LIB) `$(ROOT_BIN)root-config --glibs` \
 	 -I$(HEPMC2_INCLUDE) $(CXX_COMMON)\
 	 -L$(HEPMC2_LIB) -Wl,-rpath,$(HEPMC2_LIB) -lHepMC 
+
