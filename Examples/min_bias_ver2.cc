@@ -3,10 +3,7 @@
 
 #include "TH1D.h"
 #include "TCanvas.h"
-#include "TH1D.h"
 #include "TLegend.h"
-#include "TPaveLabel.h"
-#include "TStyle.h"
 
 #include <vector>
 
