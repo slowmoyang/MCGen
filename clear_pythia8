@@ -1,0 +1,7 @@
+#!/bin/sh
+CURDIR=$(pwd)
+rm -rfv ${CURDIR}/Downloads
+rm -rfv ${CURDIR}/HepMC2
+rm -rfv ${CURDIR}/FastJet3
+rm -rfv ${CURDIR}/LHAPDF6
+rm -rfv ${CURDIR}/Pythia8

@@ -18,7 +18,7 @@
 SHELL=/usr/bin/env bash
 
 # Include the configuration.
--include ../pythia8235/Makefile.inc
+-include Makefile.inc
 
 # Handle GZIP support.
 GZIP_INC=
@@ -29,9 +29,9 @@ ifeq ($(GZIP_USE),true)
 endif
 
 # Check distribution (use local version first, then installed version).
-ifneq ("$(wildcard ../pythia8235/lib/libpythia8.*)","")
-  PREFIX_LIB=../pythia8235/lib
-  PREFIX_INCLUDE=../pythia8235/include
+ifneq ("$(wildcard ../lib/libpythia8.*)","")
+  PREFIX_LIB=../lib
+  PREFIX_INCLUDE=../include
 endif
 CXX_COMMON:=-I$(PREFIX_INCLUDE) $(CXX_COMMON)
 CXX_COMMON+= -L$(PREFIX_LIB) -Wl,-rpath,$(PREFIX_LIB) -lpythia8 -ldl 
@@ -39,6 +39,14 @@ CXX_COMMON+= -L$(PREFIX_LIB) -Wl,-rpath,$(PREFIX_LIB) -lpythia8 -ldl
 ################################################################################
 # RULES: Definition of the rules used to build the PYTHIA examples.
 ################################################################################
+
+# Rules without physical targets (secondary expansion for specific rules).
+.SECONDEXPANSION:
+.PHONY: all clean
+
+# All targets (no default behavior).
+all:
+	@echo "Usage: make mainXX"
 
 # The Makefile configuration.
 Makefile.inc:
@@ -57,3 +65,11 @@ min_bias_ver%: min_bias_ver%.cc $(PREFIX_LIB)/libpythia8.a
 	 -I$(HEPMC2_INCLUDE) $(CXX_COMMON)\
 	 -L$(HEPMC2_LIB) -Wl,-rpath,$(HEPMC2_LIB) -lHepMC 
 
+# Clean.
+clean:
+	@rm -f main[0-9][0-9]; rm -f out[0-9][0-9];\
+	rm -f main[0-9][0-9][0-9]; rm -f out[0-9][0-9][0-9];\
+	rm -f mymain[0-9][0-9]; rm -f myout[0-9][0-9];\
+	rm -f test[0-9][0-9][0-9]; rm -f *.dat;\
+	rm -f weakbosons.lhe; rm -f Pythia8.promc; rm -f hist.root;\
+	rm -f *~; rm -f \#*; rm -f core*; rm -f *Dct.*; rm -f *.so;
