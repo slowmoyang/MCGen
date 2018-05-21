@@ -6,10 +6,12 @@ PYTHIA_VER="8235"
 HEPMC2_VER="2.06.09"
 FASTJET3_VER="3.3.1"
 LHAPDF6_VER="6.2.1"
+DELPHES_VER="3.4.1"
 
 CURDIR=$(pwd)
 DOWNLOAD_DIR=${CURDIR}/Downloads
 mkdir -v ${DOWNLOAD_DIR}
+
 
 
 # Install HepMC2
@@ -31,6 +33,8 @@ make install
 cd ${CURDIR}
 mv hepmc${HEPMC2_VER} ${DOWNLOAD_DIR}
 
+
+
 # Install FastJet3
 FASTJET3_DIR=${CURDIR}/FastJet3
 mkdir -v ${FASTJET3_DIR}
@@ -43,6 +47,8 @@ make check
 make install
 cd ${CURDIR}
 mv fastjet-${FASTJET3_VER} ${DOWNLOAD_DIR}
+
+
 
 # Install LHAPDF6
 LHAPDF6_DIR=${CURDIR}/LHAPDF6
@@ -61,16 +67,20 @@ cd ${CURDIR}
 mv LHAPDF-${LHAPDF6_VER} ${DOWNLOAD_DIR}
 
 
+
 # Download NNPDF for example2
 wget http://pcteserver.mi.infn.it/~nnpdf/nnpdf30/NNPDF30_lo_as_0130.tar.gz -P ${DOWNLOAD_DIR}
 tar xvfz ${DOWNLOAD_DIR}/NNPDF30_lo_as_0130.tar.gz -C ${LHAPDF6_DIR}/share/LHAPDF
 
 
+
 # Install Pythia8
 PYTHIA8_DIR=${CURDIR}/Pythia8
 mkdir -v ${PYTHIA8_DIR}
+
 wget http://home.thep.lu.se/~torbjorn/pythia8/pythia${PYTHIA_VER}.tgz -P ${DOWNLOAD_DIR}
 tar -xzf ${DOWNLOAD_DIR}/pythia${PYTHIA_VER}.tgz 
+
 cd ${CURDIR}/pythia${PYTHIA_VER}
 
 ./configure --prefix=${PYTHIA8_DIR} \
@@ -79,6 +89,23 @@ cd ${CURDIR}/pythia${PYTHIA_VER}
                          --with-fastjet3=${FASTJET3_DIR} \
                          --with-lhapdf6=${LHAPDF6_DIR} 
 make -j${JOBS}
+
 cp ./examples/Makefile.inc ${CURDIR}/Examples
+
 cd ${CURDIR}
 mv pythia${PYTHIA_VER} ${DOWNLOAD_DIR}
+
+# Define an environment variable for the path to Pythia8 installation directory.
+export PYTHIA8=${PYTHIA8_DIR}
+export PATH=$PATH:${PYTHIA8}/bin
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${PYTHIA8}/lib
+export PYTHIA8DATA=${PYTHIA8}/share/Pythia8/xmldoc 
+
+
+
+# Install Delphes
+wget http://cp3.irmp.ucl.ac.be/downloads/Delphes-${DELPHES_VER}.tar.gz -P ${DOWNLOAD_DIR}
+tar -zxf Delphes-${DELPHES_VER}.tar.gz:w
+
+cd Delphes-${DELPHES_VER}
+make HAS_PYTHIA8=true DelphesPythia8 -j${JOBS}
